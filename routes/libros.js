@@ -2,49 +2,70 @@ const express = require('express');
 const router = express.Router();
 const Libro = require('../models/Libro.js');
 
-const {requiredScopes} = require('express-oauth2-jwt-bearer');
+const {
+    requiredScopes
+} = require('express-oauth2-jwt-bearer');
 
 
 
 // Ruta para obtener todos los libros de la biblioteca
-router.get('/',requiredScopes('read:libros'), async (req, res, next) => {
+router.get('/', requiredScopes('read:libros'), async (req, res, next) => {
     try {
         const libros = await Libro.find();
         res.json(libros);
-    } catch(err){
+    } catch (err) {
         next(err);
     }
 });
 
+// Libros por ID
+router.get('/:_id', requiredScopes('read:libros'), async (req, res, next) => {
+    try {
+        const id = req.params._id; // Usar "_id" en lugar de "id"
+        const libro = await Libro.findById(id); // Utilizar "findById" para buscar por ID
+
+        if (!libro) {
+            const error = new Error('Libro no encontrado');
+            error.status = 404;
+            throw error;
+        }
+
+        res.json(libro);
+    } catch (err) {
+        next(err);
+    }
+});
+
+
 // Ruta para crear un nuevo libro 
-router.post('/',requiredScopes('write:libros'), async (req, res, next) => {
+router.post('/', requiredScopes('write:libros'), async (req, res, next) => {
     try {
         const nuevoLibro = new Libro(req.body);
         await nuevoLibro.save();
         res.json(nuevoLibro);
-    } catch(err){
+    } catch (err) {
         next(err);
     }
 });
 
 //Ruta para actualizar un libro dentro de la biblioteca
-router.put('/:id',requiredScopes('write:libros'), async (req, res, next) => {
+router.put('/:id', requiredScopes('write:libros'), async (req, res, next) => {
     try {
         const Libro = await Libro.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
         });
         res.json(Libro);
-    } catch(err){
+    } catch (err) {
         next(err);
     }
 });
 
 //Ruta para eliminar un libro de la biblioteca
-router.delete('/:id',requiredScopes('write:libros'), async (req, res, next) => {
+router.delete('/:id', requiredScopes('write:libros'), async (req, res, next) => {
     try {
         await Libro.findByIdAndDelete(req.params.id);
         res.json(Libro);
-    } catch(err){
+    } catch (err) {
         next(err);
     }
 });

@@ -7,6 +7,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/biblioteca", {
 });
 
 const libroSchema = new mongoose.Schema({
+    // id: String,
     titulo: String,
     autor: String,
     email: String,
