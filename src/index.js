@@ -4,7 +4,7 @@ const { auth } = require('express-oauth2-jwt-bearer');
 const errorHandler = require('./middlewares/errorHandler');
 
 
-// require('dotenv').config();
+require('dotenv').config();
 
 const jwtCheck = auth({
     audience: 'https://localhost:3000/api/libros',
