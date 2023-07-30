@@ -7,8 +7,8 @@ const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
 
 const jwtCheck = auth({
-    audience: 'https://localhost:3000/api/libros',
-    issuerBaseURL: 'https://dev-awhhrop25tjxku0v.us.auth0.com/',
+    audience: process.env.OAUTH_AUDIENCE,
+    issuerBaseURL: process.env.OAUTH_URL,
     tokenSigningAlg: 'RS256'
 });
 
@@ -23,7 +23,7 @@ app.use('/api/libros', jwtCheck, librosRouter);
 
 app.use(errorHandler);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
     console.log('Servidor iniciando desde el puerto 3000');
 });
 
