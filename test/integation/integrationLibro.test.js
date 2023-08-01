@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../src/index');
+const app = require('../../src/app');
 const libroModel = require('../../src/models/Libro')
 // Mockup de Autenticación
 jest.mock('express-oauth2-jwt-bearer', () =>{
